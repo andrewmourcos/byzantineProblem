@@ -43,13 +43,14 @@ void printLetter(letter_t letter){
 bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
 	// create list of generals + malloc error check
 	g_n = nGeneral;
+	g_m = 0;
 	g_lieutenantList = malloc(g_n*sizeof(lieutenant_t));
 	if(!c_assert(g_lieutenantList))
 		return false;
 	
 	// for each general
 	for(int i=0; i<nGeneral; i++){
-		g_m += !loyal; // count number of traitors
+		g_m += !loyal[i]; // count number of traitors
 		g_lieutenantList[i].loyal = loyal[i]; // copy loyalty flag
 		g_lieutenantList[i].messageQueue = osMessageQueueNew(MAXQUEUELEN, sizeof(letter_t), NULL); // allocate a queue
 		
@@ -57,7 +58,7 @@ bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
 		if (!c_assert(g_lieutenantList[i].messageQueue))
 			return false;
 	}
-	
+	printf("%d, %d\n", g_n, g_m);
 	// too many traitors check
 	if(!c_assert(g_n > 3*g_m))
 		return false;
