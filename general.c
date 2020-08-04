@@ -5,8 +5,33 @@
 #include <cstdlib>
 
 // add any #defines here
+#define MAXQUEUELEN 10 // max size of the message queue
+#define MAXRECURR 3
 
 // add global variables here
+typedef struct {
+	uint8_t chainIndex; // Last position in chain array
+	uint8_t chain[MAXRECURR]; // ex: [0, 3, 4, NaN] == "4:3:0"
+	char decision; // 'A' or 'R'
+} letter_t;
+
+typedef struct {
+	bool loyal;
+	bool reporter;
+	bool commander;
+	osMessageQueueId_t messageQueue;
+} lieutenant_t;
+
+lieutenant_t *g_lieutenantList;
+uint8_t g_n=0; // total number of generals
+uint8_t g_m=0; // number of traitors
+
+void printLetter(letter_t letter){
+	for(int i=letter.chainIndex; i>0; i--){
+		printf("%d:", letter.chain[i]);
+	}
+	printf("%c", letter.decision);
+}
 
 /** Record parameters and set up any OS and other resources
   * needed by your general() and broadcast() functions.
@@ -16,7 +41,27 @@
   * return true if setup successful and n > 3*m, false otherwise
   */
 bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
-
+	// create list of generals + malloc error check
+	g_n = nGeneral;
+	g_lieutenantList = malloc(g_n*sizeof(lieutenant_t));
+	if(!c_assert(g_lieutenantList))
+		return false;
+	
+	// for each general
+	for(int i=0; i<nGeneral; i++){
+		g_m += !loyal; // count number of traitors
+		g_lieutenantList[i].loyal = loyal[i]; // copy loyalty flag
+		g_lieutenantList[i].messageQueue = osMessageQueueNew(MAXQUEUELEN, sizeof(letter_t), NULL); // allocate a queue
+		
+		// queue error check
+		if (!c_assert(g_lieutenantList[i].messageQueue))
+			return false;
+	}
+	
+	// too many traitors check
+	if(!c_assert(g_n > 3*g_m))
+		return false;
+	
 	return true;
 }
 
@@ -25,6 +70,16 @@ bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
   * dynamically allocated by setup().
   */
 void cleanup(void) {
+	// free message queues
+	osStatus_t tmp;
+	for(int i=0; i<g_n; i++){
+		tmp = osMessageQueueDelete(g_lieutenantList[i].messageQueue);
+		c_assert(tmp==osOK);
+		g_lieutenantList[i].messageQueue = NULL;
+	}
+	// free lieutenant list
+	free(g_lieutenantList);
+	g_lieutenantList = NULL;
 }
 
 
