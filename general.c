@@ -7,19 +7,6 @@
 // add any #defines here
 
 // add global variables here
-char *g_reporterMat;
-// Note to self:
-// 	arr[i*M+j] == arr[i][j]
-
-void printMat(uint8_t nGeneral){
-	for(int i=0; i < nGeneral; i++){
-		for(int j=0; j < nGeneral; j++){
-			g_reporterMat[i*(nGeneral-1)+j]='R';
-			printf("%c\t", g_reporterMat[i*(nGeneral-1)+j]);
-		}
-		printf("\n");
-	}
-}
 
 
 /** Record parameters and set up any OS and other resources
@@ -30,9 +17,7 @@ void printMat(uint8_t nGeneral){
   * return true if setup successful and n > 3*m, false otherwise
   */
 bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
-	// Create report matrix
-	g_reporterMat = malloc((nGeneral-1)*(nGeneral-1)*sizeof(char));
-	printMat(nGeneral);
+
 	// Count number of traitors and check n>3*m
 	uint8_t m=0;
 	for(int i=0; i < nGeneral; i++){
@@ -40,8 +25,8 @@ bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
 			m++;
 	}
 	
-	// Errors: too many traitors, failed malloc (NULL)
-	if(!c_assert(nGeneral > 3*m) || !c_assert(g_reporterMat))
+	// Errors: too many traitors
+	if(!c_assert(nGeneral > 3*m))
 		return false;
 	
 	return true;
