@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\final.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\final.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Aug 03 17:18:13 2020
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Mon Aug 03 23:50:41 2020
 <BR><P>
 <H3>Maximum Stack Usage =         96 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -367,7 +367,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[7e]"></a>osKernelStart</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_kernel.o(.text.osKernelStart))
+<P><STRONG><a name="[80]"></a>osKernelStart</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_kernel.o(.text.osKernelStart))
 <BR><BR>[Called By]<UL><LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -605,13 +605,13 @@ Global Symbols
 <P><STRONG><a name="[3d]"></a>osThreadExit</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, rtx_thread.o(.text.osThreadExit))
 <BR>[Address Reference Count : 1]<UL><LI> rtx_thread.o(.text.svcRtxThreadNew)
 </UL>
-<P><STRONG><a name="[7d]"></a>osThreadNew</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_thread.o(.text.osThreadNew))
-<BR><BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;startGenerals
+<P><STRONG><a name="[7f]"></a>osThreadNew</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_thread.o(.text.osThreadNew))
+<BR><BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;startGenerals
 <LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[86]"></a>osThreadTerminate</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_thread.o(.text.osThreadTerminate))
-<BR><BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stopGenerals
+<P><STRONG><a name="[87]"></a>osThreadTerminate</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_thread.o(.text.osThreadTerminate))
+<BR><BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stopGenerals
 </UL>
 
 <P><STRONG><a name="[74]"></a>Free</STRONG> (Thumb, 6 bytes, Stack size 0 bytes, uart.o(i.Free))
@@ -656,11 +656,11 @@ Global Symbols
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FreeRcv
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__NVIC_EnableIRQ
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendchar
+<BR>[Called By]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendchar
 </UL>
 
 <P><STRONG><a name="[81]"></a>UARTSendChar</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, uart.o(i.UARTSendChar))
-<BR><BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendchar
+<BR><BR>[Called By]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendchar
 </UL>
 
 <P><STRONG><a name="[79]"></a>__0printf$3</STRONG> (Thumb, 22 bytes, Stack size 24 bytes, printf3.o(i.__0printf$3), UNUSED)
@@ -669,13 +669,12 @@ Global Symbols
 
 <P><STRONG><a name="[98]"></a>__1printf$3</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf3.o(i.__0printf$3), UNUSED)
 
-<P><STRONG><a name="[80]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf3.o(i.__0printf$3))
+<P><STRONG><a name="[84]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf3.o(i.__0printf$3))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printMat
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setup
+<BR>[Called By]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setup
 <LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;testCases
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;startGenerals
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;startGenerals
 </UL>
 
 <P><STRONG><a name="[99]"></a>__scatterload_copy</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_copy), UNUSED)
@@ -684,21 +683,31 @@ Global Symbols
 
 <P><STRONG><a name="[9b]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
-<P><STRONG><a name="[87]"></a>broadcast</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, general.o(i.broadcast))
+<P><STRONG><a name="[88]"></a>broadcast</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, general.o(i.broadcast))
 <BR><BR>[Called By]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;testCases
 </UL>
 
-<P><STRONG><a name="[88]"></a>cleanup</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, general.o(i.cleanup))
-<BR><BR>[Called By]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;testCases
+<P><STRONG><a name="[7c]"></a>cleanup</STRONG> (Thumb, 18 bytes, Stack size 8 bytes, general.o(i.cleanup))
+<BR><BR>[Stack]<UL><LI>Max Depth = 16<LI>Call Chain = cleanup &rArr; free
+</UL>
+<BR>[Calls]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
+</UL>
+<BR>[Called By]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;testCases
 </UL>
 
 <P><STRONG><a name="[3f]"></a>fputc</STRONG> (Thumb, 14 bytes, Stack size 16 bytes, retarget.o(i.fputc))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = fputc &rArr; sendchar &rArr; UARTInit &rArr; FreeSnd
 </UL>
-<BR>[Calls]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendchar
+<BR>[Calls]<UL><LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendchar
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> printf3.o(i.__0printf$3)
 </UL>
+<P><STRONG><a name="[7d]"></a>free</STRONG> (Thumb, 76 bytes, Stack size 8 bytes, malloc.o(i.free))
+<BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = free
+</UL>
+<BR>[Called By]<UL><LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleanup
+</UL>
+
 <P><STRONG><a name="[41]"></a>general</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, general.o(i.general))
 <BR>[Address Reference Count : 1]<UL><LI> final.o(i.startGenerals)
 </UL>
@@ -709,8 +718,8 @@ Global Symbols
 <P><STRONG><a name="[2d]"></a>main</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, final.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = main &rArr; osKernelInitialize
 </UL>
-<BR>[Calls]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osThreadNew
-<LI><a href="#[7e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osKernelStart
+<BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osThreadNew
+<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osKernelStart
 <LI><a href="#[4b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osKernelInitialize
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry9a.o(.ARM.Collect$$$$0000000B)
@@ -730,15 +739,7 @@ Global Symbols
 <P><STRONG><a name="[35]"></a>osRtxIdleThread</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, rtx_config.o(i.osRtxIdleThread))
 <BR>[Address Reference Count : 1]<UL><LI> rtx_thread.o(.text.osRtxThreadStartup)
 </UL>
-<P><STRONG><a name="[7f]"></a>printMat</STRONG> (Thumb, 64 bytes, Stack size 16 bytes, general.o(i.printMat))
-<BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = printMat &rArr; __2printf
-</UL>
-<BR>[Calls]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
-</UL>
-<BR>[Called By]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setup
-</UL>
-
-<P><STRONG><a name="[7c]"></a>sendchar</STRONG> (Thumb, 64 bytes, Stack size 8 bytes, retarget.o(i.sendchar))
+<P><STRONG><a name="[7e]"></a>sendchar</STRONG> (Thumb, 64 bytes, Stack size 8 bytes, retarget.o(i.sendchar))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = sendchar &rArr; UARTInit &rArr; FreeSnd
 </UL>
 <BR>[Calls]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UARTSendChar
@@ -747,42 +748,41 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[3f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;fputc
 </UL>
 
-<P><STRONG><a name="[82]"></a>setup</STRONG> (Thumb, 114 bytes, Stack size 24 bytes, general.o(i.setup))
-<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = setup &rArr; printMat &rArr; __2printf
+<P><STRONG><a name="[82]"></a>setup</STRONG> (Thumb, 120 bytes, Stack size 24 bytes, general.o(i.setup))
+<BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = setup &rArr; __2printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printMat
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
+<BR>[Calls]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;malloc
 </UL>
 <BR>[Called By]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;testCases
 </UL>
 
-<P><STRONG><a name="[84]"></a>startGenerals</STRONG> (Thumb, 60 bytes, Stack size 16 bytes, final.o(i.startGenerals))
+<P><STRONG><a name="[85]"></a>startGenerals</STRONG> (Thumb, 60 bytes, Stack size 16 bytes, final.o(i.startGenerals))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = startGenerals &rArr; __2printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osThreadNew
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
+<BR>[Calls]<UL><LI><a href="#[7f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osThreadNew
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;testCases
 </UL>
 
-<P><STRONG><a name="[85]"></a>stopGenerals</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, final.o(i.stopGenerals))
+<P><STRONG><a name="[86]"></a>stopGenerals</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, final.o(i.stopGenerals))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = stopGenerals
 </UL>
-<BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osThreadTerminate
+<BR>[Calls]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osThreadTerminate
 </UL>
 <BR>[Called By]<UL><LI><a href="#[40]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;testCases
 </UL>
 
 <P><STRONG><a name="[40]"></a>testCases</STRONG> (Thumb, 122 bytes, Stack size 16 bytes, final.o(i.testCases))
-<BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = testCases &rArr; setup &rArr; printMat &rArr; __2printf
+<BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = testCases &rArr; setup &rArr; __2printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setup
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleanup
-<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;broadcast
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stopGenerals
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;startGenerals
-<LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
+<LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleanup
+<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;broadcast
+<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stopGenerals
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;startGenerals
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> final.o(i.main)
 </UL><P>

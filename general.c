@@ -7,6 +7,13 @@
 // add any #defines here
 
 // add global variables here
+typedef struct {
+	bool loyal;
+	bool commander;
+} lieutenant_t;
+
+lieutenant_t *g_lieutenantList;
+uint8_t g_m = 0; // Number of traitors (or recursions needed)
 
 
 /** Record parameters and set up any OS and other resources
@@ -17,16 +24,17 @@
   * return true if setup successful and n > 3*m, false otherwise
   */
 bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
-
+	g_lieutenantList = malloc(nGeneral*sizeof(lieutenant_t));
+	
 	// Count number of traitors and check n>3*m
 	uint8_t m=0;
 	for(int i=0; i < nGeneral; i++){
-		if(!loyal[i])
-			m++;
+		m+=!loyal[i];
+		g_lieutenantList[i].loyal=loyal[i];
 	}
 	
-	// Errors: too many traitors
-	if(!c_assert(nGeneral > 3*m))
+	// Errors: too many traitors, failed malloc
+	if(!c_assert(nGeneral > 3*m) || !c_assert(g_lieutenantList))
 		return false;
 	
 	return true;
@@ -37,6 +45,8 @@ bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
   * dynamically allocated by setup().
   */
 void cleanup(void) {
+	free(g_lieutenantList);
+	g_lieutenantList = NULL;
 }
 
 
