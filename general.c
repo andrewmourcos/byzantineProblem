@@ -153,7 +153,7 @@ void general(void *idPtr) {
 		printLetter(received);
 	
 	//om_algorithm(id, g_m, received);
-	c_assert(tmp==osOK);
+	// c_assert(tmp==osOK);
 	
 	g_numActiveGenerals--;
 	if(g_numActiveGenerals==0)
