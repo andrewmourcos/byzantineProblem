@@ -9,7 +9,9 @@
 #define MAXRECURR 3
 
 // add global variables here
-osSemaphoreId_t sem_activeGenerals;
+osSemaphoreId_t ts_generalsDone;
+osSemaphoreId_t sem_generalsDone;
+osMutexId_t mut_numGenerals;
 
 typedef struct {
 	uint8_t chainIndex; // Last position in chain array
@@ -45,6 +47,11 @@ void printLetter(letter_t letter){
   * return true if setup successful and n > 3*m, false otherwise
   */
 bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
+	// create semaphores/mutexes
+	sem_generalsDone = osSemaphoreNew(1, 0, NULL);
+	ts_generalsDone = osSemaphoreNew(1, 1, NULL);
+	mut_numGenerals = osMutexNew(NULL);
+	
 	// create list of generals + malloc error check
 	g_n = nGeneral;
 	g_m = 0;
@@ -57,16 +64,19 @@ bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
 		g_m += !loyal[i]; // count number of traitors
 		g_lieutenantList[i].loyal = loyal[i]; // copy loyalty flag
 		g_lieutenantList[i].messageQueue = osMessageQueueNew(MAXQUEUELEN, sizeof(letter_t), NULL); // allocate a queue
+		g_lieutenantList[i].commander=false;
+		g_lieutenantList[i].reporter = false;
 		
 		// queue error check
 		if (!c_assert(g_lieutenantList[i].messageQueue))
 			return false;
 	}
+	g_lieutenantList[reporter].reporter=true;
 	printf("%d, %d\n", g_n, g_m);
 	// too many traitors check
 	if(!c_assert(g_n > 3*g_m))
 		return false;
-	
+		
 	return true;
 }
 
@@ -85,10 +95,19 @@ void cleanup(void) {
 	// free lieutenant list
 	free(g_lieutenantList);
 	g_lieutenantList = NULL;
+
+	// free semaphores/mutexes/etc
+	tmp = osSemaphoreDelete(sem_generalsDone);
+	c_assert(tmp==osOK);
+	sem_generalsDone = NULL;
 	
-	// free semaphores
-	osSemaphoreDelete(sem_activeGenerals);
-	sem_activeGenerals = NULL;
+	tmp = osSemaphoreDelete(ts_generalsDone);
+	c_assert(tmp==osOK);
+	ts_generalsDone = NULL;
+	
+	tmp = osMutexDelete(mut_numGenerals);
+	c_assert(tmp==osOK);
+	mut_numGenerals = NULL;
 }
 
 
@@ -102,6 +121,8 @@ void cleanup(void) {
 void broadcast(char command, uint8_t sender) {
 	osStatus_t tmp;
 	
+	g_lieutenantList[sender].commander=true;
+	
 	letter_t letter;
 	letter.chainIndex = 1;
 	letter.chain[0] = sender;
@@ -113,22 +134,49 @@ void broadcast(char command, uint8_t sender) {
 		tmp = osMessageQueuePut(g_lieutenantList[i].messageQueue, &letter, 0,0);
 		c_assert(tmp==osOK);
 	}
-	printf("-->%d\n", letter.chain[0]);
-	printLetter(letter);
+	
 	// wait for generals to be done talking
-	osSemaphoreAcquire(sem_activeGenerals, osWaitForever);
-	osSemaphoreRelease(sem_activeGenerals);
+	/*
+	tmp = osSemaphoreAcquire(ts_generalsDone, osWaitForever);
+	c_assert(tmp==osOK);
+	tmp = osSemaphoreAcquire(sem_generalsDone, osWaitForever);
+	c_assert(tmp==osOK);
+	osSemaphoreRelease(ts_generalsDone);
+	osSemaphoreRelease(sem_generalsDone);
+	*/
+	osDelay(100);
+	
 	return;
 }
 
+bool in_array(uint8_t val, uint8_t arr[], uint8_t len){
+	for(int i=0; i<len; i++){
+		if (arr[i]==val)
+			return true;
+	}
+	return false;
+}
+
 void om_algorithm(uint8_t id, uint8_t m, letter_t letter){
-	if(m==0){
-		if(g_lieutenantList[id].reporter)
-			printLetter(letter);
-	}
-	else{
+	if(g_lieutenantList[id].reporter){
 		
+		if(m==0){
+			printLetter(letter);
+		}
+		
+		else{
+			for(int i=0; i<g_n; i++){
+				if(g_lieutenantList[i].commander || i==id || in_array(i, letter.chain, MAXRECURR-1))
+					continue;
+				
+				letter.chain[g_m - m + 1] = i;
+				letter.chainIndex = g_m - m + 2;
+				
+				om_algorithm(id, m-1, letter);
+			}
+		}
 	}
+
 
 }
 
@@ -142,20 +190,32 @@ void om_algorithm(uint8_t id, uint8_t m, letter_t letter){
 void general(void *idPtr) {
 	uint8_t id = *(uint8_t *)idPtr;
 	
-	g_numActiveGenerals ++;
-	if(g_numActiveGenerals==1)
-		osSemaphoreAcquire(sem_activeGenerals, osWaitForever);
+	osStatus_t tmp;
+	/*
+	tmp = osSemaphoreAcquire(ts_generalsDone, osWaitForever);
+	c_assert(tmp==osOK);
+	osSemaphoreRelease(ts_generalsDone);
 
+	tmp = osMutexAcquire(mut_numGenerals, osWaitForever);{
+		c_assert(tmp==osOK);
+		g_numActiveGenerals++;
+		if(g_numActiveGenerals == 1){
+			tmp = osSemaphoreAcquire(sem_generalsDone, osWaitForever);
+			c_assert(tmp==osOK);
+		}
+	}osMutexRelease(mut_numGenerals);
+	*/
 	// generate next letter and send it
 	letter_t received;
-	osStatus_t tmp;
-	
-	tmp = osMessageQueueGet(g_lieutenantList[id].messageQueue, &received, NULL, osWaitForever);
-	
-	//om_algorithm(id, g_m, received);
-	// c_assert(tmp==osOK);
-	
-	g_numActiveGenerals--;
-	if(g_numActiveGenerals==0)
-		osSemaphoreRelease(sem_activeGenerals);
+	if(!g_lieutenantList[id].commander){
+		tmp = osMessageQueueGet(g_lieutenantList[id].messageQueue, &received, NULL, osWaitForever);
+		om_algorithm(id, g_m, received);
+	}
+	/*
+	tmp = osMutexAcquire(mut_numGenerals, osWaitForever);{
+		g_numActiveGenerals--;
+		if(g_numActiveGenerals==0)
+			osSemaphoreRelease(sem_generalsDone);
+	} osMutexRelease(mut_numGenerals);
+	*/
 }
