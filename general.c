@@ -92,6 +92,20 @@ void cleanup(void) {
   * sender: general sending the command to other n-1 generals
   */
 void broadcast(char command, uint8_t sender) {
+	osStatus_t tmp;
+	
+	letter_t letter;
+	letter.chainIndex = 1;
+	letter.chain[0] = sender;
+	
+	for(int i=0; i<g_n; i++){
+		if(i == sender)
+			continue;
+		tmp = osMessageQueuePut(g_lieutenantList[i].messageQueue, &letter, 0,0);
+		c_assert(tmp==osOK);
+	}
+	
+	// wait for generals 
 }
 
 
@@ -104,4 +118,6 @@ void broadcast(char command, uint8_t sender) {
   */
 void general(void *idPtr) {
 	uint8_t id = *(uint8_t *)idPtr;
+	
+	
 }
