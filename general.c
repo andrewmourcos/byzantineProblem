@@ -9,6 +9,8 @@
 #define MAXRECURR 3
 
 // add global variables here
+osSemaphoreId_t sem_activeGenerals;
+
 typedef struct {
 	uint8_t chainIndex; // Last position in chain array
 	uint8_t chain[MAXRECURR]; // ex: [0, 3, 4, NaN] == "4:3:0"
@@ -25,6 +27,8 @@ typedef struct {
 lieutenant_t *g_lieutenantList;
 uint8_t g_n=0; // total number of generals
 uint8_t g_m=0; // number of traitors
+
+uint8_t g_numActiveGenerals = 0;
 
 void printLetter(letter_t letter){
 	for(int i=letter.chainIndex; i>0; i--){
@@ -81,6 +85,10 @@ void cleanup(void) {
 	// free lieutenant list
 	free(g_lieutenantList);
 	g_lieutenantList = NULL;
+	
+	// free semaphores
+	osSemaphoreDelete(sem_activeGenerals);
+	sem_activeGenerals = NULL;
 }
 
 
@@ -97,6 +105,7 @@ void broadcast(char command, uint8_t sender) {
 	letter_t letter;
 	letter.chainIndex = 1;
 	letter.chain[0] = sender;
+	letter.decision = command;
 	
 	for(int i=0; i<g_n; i++){
 		if(i == sender)
@@ -104,10 +113,22 @@ void broadcast(char command, uint8_t sender) {
 		tmp = osMessageQueuePut(g_lieutenantList[i].messageQueue, &letter, 0,0);
 		c_assert(tmp==osOK);
 	}
-	
-	// wait for generals 
+	// wait for generals to be done talking
+	osSemaphoreAcquire(sem_activeGenerals, osWaitForever);
+	osSemaphoreRelease(sem_activeGenerals);
+	return;
 }
 
+void om_algorithm(uint8_t id, uint8_t m, letter_t letter){
+	if(m==0){
+		if(g_lieutenantList[id].reporter)
+			printLetter(letter);
+	}
+	else{
+		
+	}
+
+}
 
 /** Generals are created before each test and deleted after each
   * test.  The function should wait for a value from broadcast()
@@ -119,5 +140,22 @@ void broadcast(char command, uint8_t sender) {
 void general(void *idPtr) {
 	uint8_t id = *(uint8_t *)idPtr;
 	
+	g_numActiveGenerals ++;
+	if(g_numActiveGenerals==1)
+		osSemaphoreAcquire(sem_activeGenerals, osWaitForever);
+
+	// generate next letter and send it
+	letter_t received;
+	osStatus_t tmp;
 	
+	tmp = osMessageQueueGet(g_lieutenantList[id].messageQueue, &received, NULL, osWaitForever);
+	if(id==1)
+		printLetter(received);
+	
+	//om_algorithm(id, g_m, received);
+	c_assert(tmp==osOK);
+	
+	g_numActiveGenerals--;
+	if(g_numActiveGenerals==0)
+		osSemaphoreRelease(sem_activeGenerals);
 }
