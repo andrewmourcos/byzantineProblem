@@ -145,17 +145,25 @@ bool in_array(uint8_t val, uint8_t arr[], uint8_t len){
 void om_algorithm(uint8_t id, uint8_t m, letter_t letter){
 		
 	if(m==0 && g_lieutenantList[id].reporter){
-		printLetter(letter);
+		// Protecting printing rights
+		osMutexAcquire(mut_printer, osWaitForever);{
+			printLetter(letter);
+		} osMutexRelease(mut_printer);
 	}
 	
 	else if(m!=0){
+		//char tmp = letter.decision;
 		for(int i=0; i<g_n; i++){
 			if(g_lieutenantList[i].commander || i==id || in_array(i, letter.chain, letter.chainIndex))
 					continue;
-					
+			
+				if(!g_lieutenantList[id].loyal && id%2==0)
+					letter.decision = 'R';
+				else if(!g_lieutenantList[id].loyal && id%2!=0)
+					letter.decision = 'A';
+			
 				letter.chain[g_m - m + 1] = id;
 				letter.chainIndex = g_m - m + 2;
-				
 				om_algorithm(i, m-1, letter);
 		}
 	}	
@@ -177,11 +185,7 @@ void general(void *idPtr) {
 	letter_t received;
 	if(!g_lieutenantList[id].commander){
 		tmp = osMessageQueueGet(g_lieutenantList[id].messageQueue, &received, NULL, osWaitForever);
-		
-		osMutexAcquire(mut_printer, osWaitForever);{
-			om_algorithm(id, g_m, received);
-		} osMutexRelease(mut_printer);
-		
+		om_algorithm(id, g_m, received);
 	}
 
 }

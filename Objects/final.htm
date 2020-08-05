@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\final.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\final.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Aug 05 19:28:50 2020
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Wed Aug 05 19:40:14 2020
 <BR><P>
 <H3>Maximum Stack Usage =         96 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -18,7 +18,7 @@ Mutually Recursive functions
  <LI><a href="#[5]">UsageFault_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[5]">UsageFault_Handler</a><BR>
  <LI><a href="#[7]">DebugMon_Handler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[7]">DebugMon_Handler</a><BR>
  <LI><a href="#[20]">ADC_IRQHandler</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[20]">ADC_IRQHandler</a><BR>
- <LI><a href="#[8c]">om_algorithm</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[8c]">om_algorithm</a><BR>
+ <LI><a href="#[8b]">om_algorithm</a>&nbsp;&nbsp;&nbsp;&rArr;&nbsp;&nbsp;&nbsp;<a href="#[8b]">om_algorithm</a><BR>
 </UL>
 <P>
 <H3>
@@ -379,7 +379,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[8f]"></a>osKernelStart</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_kernel.o(.text.osKernelStart))
+<P><STRONG><a name="[8d]"></a>osKernelStart</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_kernel.o(.text.osKernelStart))
 <BR><BR>[Called By]<UL><LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
@@ -414,8 +414,8 @@ Global Symbols
 <LI><a href="#[3d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osRtxTimerTick
 </UL>
 
-<P><STRONG><a name="[8b]"></a>osMutexAcquire</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_mutex.o(.text.osMutexAcquire))
-<BR><BR>[Called By]<UL><LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;general
+<P><STRONG><a name="[8e]"></a>osMutexAcquire</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_mutex.o(.text.osMutexAcquire))
+<BR><BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;om_algorithm
 </UL>
 
 <P><STRONG><a name="[89]"></a>osMutexDelete</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_mutex.o(.text.osMutexDelete))
@@ -426,8 +426,8 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setup
 </UL>
 
-<P><STRONG><a name="[8d]"></a>osMutexRelease</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_mutex.o(.text.osMutexRelease))
-<BR><BR>[Called By]<UL><LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;general
+<P><STRONG><a name="[90]"></a>osMutexRelease</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_mutex.o(.text.osMutexRelease))
+<BR><BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;om_algorithm
 </UL>
 
 <P><STRONG><a name="[79]"></a>osRtxMemoryAlloc</STRONG> (Thumb, 128 bytes, Stack size 16 bytes, rtx_memory.o(.text.osRtxMemoryAlloc))
@@ -670,7 +670,7 @@ Global Symbols
 <P><STRONG><a name="[43]"></a>osThreadExit</STRONG> (Thumb, 12 bytes, Stack size 0 bytes, rtx_thread.o(.text.osThreadExit))
 <BR>[Address Reference Count : 1]<UL><LI> rtx_thread.o(.text.svcRtxThreadNew)
 </UL>
-<P><STRONG><a name="[8e]"></a>osThreadNew</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_thread.o(.text.osThreadNew))
+<P><STRONG><a name="[8c]"></a>osThreadNew</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_thread.o(.text.osThreadNew))
 <BR><BR>[Called By]<UL><LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;startGenerals
 <LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
@@ -737,7 +737,7 @@ Global Symbols
 <P><STRONG><a name="[84]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf3.o(i.__0printf$3))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printLetter
+<BR>[Called By]<UL><LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printLetter
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setup
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleanup
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;broadcast
@@ -785,13 +785,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleanup
 </UL>
 
-<P><STRONG><a name="[47]"></a>general</STRONG> (Thumb, 78 bytes, Stack size 24 bytes, general.o(i.general))
+<P><STRONG><a name="[47]"></a>general</STRONG> (Thumb, 58 bytes, Stack size 24 bytes, general.o(i.general))
 <BR><BR>[Stack]<UL><LI>Max Depth = 96<LI>Call Chain = general &rArr; om_algorithm &rArr;  om_algorithm (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osMutexRelease
-<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osMutexAcquire
-<LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osMessageQueueGet
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;om_algorithm
+<BR>[Calls]<UL><LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osMessageQueueGet
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;om_algorithm
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> final.o(i.startGenerals)
 </UL>
@@ -802,14 +800,14 @@ Global Symbols
 <P><STRONG><a name="[91]"></a>in_array</STRONG> (Thumb, 30 bytes, Stack size 8 bytes, general.o(i.in_array))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = in_array
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;om_algorithm
+<BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;om_algorithm
 </UL>
 
 <P><STRONG><a name="[2d]"></a>main</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, final.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = main &rArr; osKernelInitialize
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osThreadNew
-<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osKernelStart
+<BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osThreadNew
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osKernelStart
 <LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osKernelInitialize
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> entry9a.o(.ARM.Collect$$$$0000000B)
@@ -820,15 +818,17 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setup
 </UL>
 
-<P><STRONG><a name="[8c]"></a>om_algorithm</STRONG> (Thumb, 126 bytes, Stack size 32 bytes, general.o(i.om_algorithm))
+<P><STRONG><a name="[8b]"></a>om_algorithm</STRONG> (Thumb, 210 bytes, Stack size 32 bytes, general.o(i.om_algorithm))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72 + In Cycle
 <LI>Call Chain = om_algorithm &rArr;  om_algorithm (Cycle)
 </UL>
-<BR>[Calls]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printLetter
-<LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;om_algorithm
+<BR>[Calls]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osMutexRelease
+<LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osMutexAcquire
+<LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printLetter
+<LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;om_algorithm
 <LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;in_array
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;om_algorithm
+<BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;om_algorithm
 <LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;general
 </UL>
 
@@ -841,12 +841,12 @@ Global Symbols
 <P><STRONG><a name="[3b]"></a>osRtxIdleThread</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, rtx_config.o(i.osRtxIdleThread))
 <BR>[Address Reference Count : 1]<UL><LI> rtx_thread.o(.text.osRtxThreadStartup)
 </UL>
-<P><STRONG><a name="[90]"></a>printLetter</STRONG> (Thumb, 40 bytes, Stack size 16 bytes, general.o(i.printLetter))
+<P><STRONG><a name="[8f]"></a>printLetter</STRONG> (Thumb, 40 bytes, Stack size 16 bytes, general.o(i.printLetter))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = printLetter &rArr; __2printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;om_algorithm
+<BR>[Called By]<UL><LI><a href="#[8b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;om_algorithm
 </UL>
 
 <P><STRONG><a name="[8a]"></a>sendchar</STRONG> (Thumb, 64 bytes, Stack size 8 bytes, retarget.o(i.sendchar))
@@ -872,7 +872,7 @@ Global Symbols
 <P><STRONG><a name="[96]"></a>startGenerals</STRONG> (Thumb, 60 bytes, Stack size 16 bytes, final.o(i.startGenerals))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = startGenerals &rArr; __2printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osThreadNew
+<BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osThreadNew
 <LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;testCases
