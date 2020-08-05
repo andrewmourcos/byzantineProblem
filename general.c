@@ -141,12 +141,26 @@ bool in_array(uint8_t val, uint8_t arr[], uint8_t len){
 }
 
 void om_algorithm(uint8_t id, uint8_t m, letter_t letter){
-	if(g_lieutenantList[id].reporter){
 		
-		if(m==0){
-			printLetter(letter);
+	if(m==0 && g_lieutenantList[id].reporter){
+		printLetter(letter);
+	}
+	
+	else if(m!=0){
+		for(int i=0; i<g_n; i++){
+			if(g_lieutenantList[i].commander || i==id || in_array(i, letter.chain, letter.chainIndex))
+					continue;
+					
+				letter.chain[g_m - m + 1] = id;
+				letter.chainIndex = g_m - m + 2;
+				
+				om_algorithm(i, m-1, letter);
 		}
+	}	
 		
+		
+		
+		/*
 		else{
 			for(int i=0; i<g_n; i++){
 				if(g_lieutenantList[i].commander || i==id || in_array(i, letter.chain, letter.chainIndex))
@@ -158,7 +172,8 @@ void om_algorithm(uint8_t id, uint8_t m, letter_t letter){
 				om_algorithm(id, m-1, letter);
 			}
 		}
-	}
+	*/
+	
 }
 
 /** Generals are created before each test and deleted after each
