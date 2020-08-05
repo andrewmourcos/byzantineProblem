@@ -5,7 +5,7 @@
 #include <cstdlib>
 
 // add any #defines here
-#define MAXQUEUELEN 10 // max size of the message queue
+#define MAXQUEUELEN 7 // max size of the message queue
 #define MAXRECURR 3
 
 // add global variables here
@@ -31,10 +31,10 @@ uint8_t g_m=0; // number of traitors
 uint8_t g_numActiveGenerals = 0;
 
 void printLetter(letter_t letter){
-	for(int i=letter.chainIndex; i>0; i--){
+	for(int i=letter.chainIndex-1; i>=0; i--){
 		printf("%d:", letter.chain[i]);
 	}
-	printf("%c", letter.decision);
+	printf("%c\n", letter.decision);
 }
 
 /** Record parameters and set up any OS and other resources
@@ -113,6 +113,8 @@ void broadcast(char command, uint8_t sender) {
 		tmp = osMessageQueuePut(g_lieutenantList[i].messageQueue, &letter, 0,0);
 		c_assert(tmp==osOK);
 	}
+	printf("-->%d\n", letter.chain[0]);
+	printLetter(letter);
 	// wait for generals to be done talking
 	osSemaphoreAcquire(sem_activeGenerals, osWaitForever);
 	osSemaphoreRelease(sem_activeGenerals);
@@ -149,8 +151,6 @@ void general(void *idPtr) {
 	osStatus_t tmp;
 	
 	tmp = osMessageQueueGet(g_lieutenantList[id].messageQueue, &received, NULL, osWaitForever);
-	if(id==1)
-		printLetter(received);
 	
 	//om_algorithm(id, g_m, received);
 	// c_assert(tmp==osOK);

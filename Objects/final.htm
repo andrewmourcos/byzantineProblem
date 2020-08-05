@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\final.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\final.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Tue Aug 04 21:40:40 2020
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Tue Aug 04 22:02:54 2020
 <BR><P>
 <H3>Maximum Stack Usage =         96 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -375,8 +375,8 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[2d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[85]"></a>osMessageQueueDelete</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_msgqueue.o(.text.osMessageQueueDelete))
-<BR><BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleanup
+<P><STRONG><a name="[86]"></a>osMessageQueueDelete</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_msgqueue.o(.text.osMessageQueueDelete))
+<BR><BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleanup
 </UL>
 
 <P><STRONG><a name="[51]"></a>osMessageQueueGet</STRONG> (Thumb, 108 bytes, Stack size 24 bytes, rtx_msgqueue.o(.text.osMessageQueueGet))
@@ -628,13 +628,13 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> rtx_thread.o(.text.osRtxThreadStartup)
 </UL>
-<P><STRONG><a name="[83]"></a>osSemaphoreAcquire</STRONG> (Thumb, 84 bytes, Stack size 0 bytes, rtx_semaphore.o(.text.osSemaphoreAcquire))
+<P><STRONG><a name="[84]"></a>osSemaphoreAcquire</STRONG> (Thumb, 84 bytes, Stack size 0 bytes, rtx_semaphore.o(.text.osSemaphoreAcquire))
 <BR><BR>[Called By]<UL><LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;general
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;broadcast
 </UL>
 
-<P><STRONG><a name="[87]"></a>osSemaphoreDelete</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_semaphore.o(.text.osSemaphoreDelete))
-<BR><BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleanup
+<P><STRONG><a name="[88]"></a>osSemaphoreDelete</STRONG> (Thumb, 36 bytes, Stack size 0 bytes, rtx_semaphore.o(.text.osSemaphoreDelete))
+<BR><BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleanup
 </UL>
 
 <P><STRONG><a name="[71]"></a>osSemaphoreRelease</STRONG> (Thumb, 100 bytes, Stack size 16 bytes, rtx_semaphore.o(.text.osSemaphoreRelease))
@@ -700,11 +700,11 @@ Global Symbols
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;FreeRcv
 <LI><a href="#[7d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__NVIC_EnableIRQ
 </UL>
-<BR>[Called By]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendchar
+<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendchar
 </UL>
 
 <P><STRONG><a name="[8c]"></a>UARTSendChar</STRONG> (Thumb, 26 bytes, Stack size 0 bytes, uart.o(i.UARTSendChar))
-<BR><BR>[Called By]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendchar
+<BR><BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendchar
 </UL>
 
 <P><STRONG><a name="[7e]"></a>__0printf$3</STRONG> (Thumb, 22 bytes, Stack size 24 bytes, printf3.o(i.__0printf$3), UNUSED)
@@ -716,10 +716,9 @@ Global Symbols
 <P><STRONG><a name="[82]"></a>__2printf</STRONG> (Thumb, 0 bytes, Stack size 24 bytes, printf3.o(i.__0printf$3))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = __2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printLetter
+<BR>[Called By]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printLetter
 <LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setup
-<LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;general
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleanup
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleanup
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;broadcast
 <LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;testCases
 <LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;startGenerals
@@ -731,23 +730,24 @@ Global Symbols
 
 <P><STRONG><a name="[a4]"></a>__scatterload_zeroinit</STRONG> (Thumb, 14 bytes, Stack size unknown bytes, handlers.o(i.__scatterload_zeroinit), UNUSED)
 
-<P><STRONG><a name="[81]"></a>broadcast</STRONG> (Thumb, 108 bytes, Stack size 32 bytes, general.o(i.broadcast))
+<P><STRONG><a name="[81]"></a>broadcast</STRONG> (Thumb, 126 bytes, Stack size 32 bytes, general.o(i.broadcast))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = broadcast &rArr; osMessageQueuePut &rArr; osRtxPostProcess
 </UL>
 <BR>[Calls]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osSemaphoreRelease
-<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osSemaphoreAcquire
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osSemaphoreAcquire
 <LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osMessageQueuePut
+<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printLetter
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;testCases
 </UL>
 
-<P><STRONG><a name="[84]"></a>cleanup</STRONG> (Thumb, 92 bytes, Stack size 16 bytes, general.o(i.cleanup))
+<P><STRONG><a name="[85]"></a>cleanup</STRONG> (Thumb, 92 bytes, Stack size 16 bytes, general.o(i.cleanup))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = cleanup &rArr; __2printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osSemaphoreDelete
-<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osMessageQueueDelete
-<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
+<BR>[Calls]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osSemaphoreDelete
+<LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osMessageQueueDelete
+<LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;free
 <LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;testCases
@@ -756,24 +756,22 @@ Global Symbols
 <P><STRONG><a name="[43]"></a>fputc</STRONG> (Thumb, 14 bytes, Stack size 16 bytes, retarget.o(i.fputc))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = fputc &rArr; sendchar &rArr; UARTInit &rArr; FreeSnd
 </UL>
-<BR>[Calls]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendchar
+<BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendchar
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> printf3.o(i.__0printf$3)
 </UL>
-<P><STRONG><a name="[86]"></a>free</STRONG> (Thumb, 76 bytes, Stack size 8 bytes, malloc.o(i.free))
+<P><STRONG><a name="[87]"></a>free</STRONG> (Thumb, 76 bytes, Stack size 8 bytes, malloc.o(i.free))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = free
 </UL>
-<BR>[Called By]<UL><LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleanup
+<BR>[Called By]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleanup
 </UL>
 
-<P><STRONG><a name="[45]"></a>general</STRONG> (Thumb, 114 bytes, Stack size 24 bytes, general.o(i.general))
+<P><STRONG><a name="[45]"></a>general</STRONG> (Thumb, 84 bytes, Stack size 24 bytes, general.o(i.general))
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = general &rArr; osMessageQueueGet &rArr; osRtxPostProcess
 </UL>
 <BR>[Calls]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osSemaphoreRelease
-<LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osSemaphoreAcquire
+<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osSemaphoreAcquire
 <LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;osMessageQueueGet
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printLetter
-<LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> final.o(i.startGenerals)
 </UL>
@@ -805,15 +803,15 @@ Global Symbols
 <P><STRONG><a name="[36]"></a>osRtxIdleThread</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, rtx_config.o(i.osRtxIdleThread))
 <BR>[Address Reference Count : 1]<UL><LI> rtx_thread.o(.text.osRtxThreadStartup)
 </UL>
-<P><STRONG><a name="[89]"></a>printLetter</STRONG> (Thumb, 38 bytes, Stack size 16 bytes, general.o(i.printLetter))
+<P><STRONG><a name="[83]"></a>printLetter</STRONG> (Thumb, 40 bytes, Stack size 16 bytes, general.o(i.printLetter))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = printLetter &rArr; __2printf
 </UL>
 <BR>[Calls]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__2printf
 </UL>
-<BR>[Called By]<UL><LI><a href="#[45]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;general
+<BR>[Called By]<UL><LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;broadcast
 </UL>
 
-<P><STRONG><a name="[88]"></a>sendchar</STRONG> (Thumb, 64 bytes, Stack size 8 bytes, retarget.o(i.sendchar))
+<P><STRONG><a name="[89]"></a>sendchar</STRONG> (Thumb, 64 bytes, Stack size 8 bytes, retarget.o(i.sendchar))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = sendchar &rArr; UARTInit &rArr; FreeSnd
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UARTSendChar
@@ -853,7 +851,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 88<LI>Call Chain = testCases &rArr; broadcast &rArr; osMessageQueuePut &rArr; osRtxPostProcess
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;setup
-<LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleanup
+<LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;cleanup
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;broadcast
 <LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stopGenerals
 <LI><a href="#[8f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;startGenerals
