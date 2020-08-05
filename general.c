@@ -143,7 +143,7 @@ void om_algorithm(uint8_t id, uint8_t m, letter_t letter){
 		
 		else{
 			for(int i=0; i<g_n; i++){
-				if(g_lieutenantList[i].commander || i==id || in_array(i, letter.chain, letter.chainIndex-1))
+				if(g_lieutenantList[i].commander || i==id || in_array(i, letter.chain, letter.chainIndex))
 					continue;
 					
 				letter.chain[g_m - m + 1] = i;
