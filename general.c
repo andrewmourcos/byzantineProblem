@@ -112,16 +112,22 @@ void broadcast(char command, uint8_t sender) {
 	letter_t letter;
 	letter.chainIndex = 1;
 	letter.chain[0] = sender;
-	letter.decision = command;
 	
 	for(int i=0; i<g_n; i++){
 		if(i == sender)
 			continue;
+	
+		if( (!g_lieutenantList[sender].loyal) && (i%2==0) )
+			letter.decision = 'R';
+		else if( (!g_lieutenantList[sender].loyal) && (i%2!=0) )
+			letter.decision = 'A';
+		else
+			letter.decision = command;
 		
 		tmp = osMessageQueuePut(g_lieutenantList[i].messageQueue, &letter, 0,0);
 		c_assert(tmp==osOK);
 	}
-	osDelay(90);
+	osDelay(50);
 	
 	return;
 }
@@ -153,8 +159,6 @@ void om_algorithm(uint8_t id, uint8_t m, letter_t letter){
 			}
 		}
 	}
-
-
 }
 
 /** Generals are created before each test and deleted after each
