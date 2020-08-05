@@ -121,7 +121,7 @@ void broadcast(char command, uint8_t sender) {
 		tmp = osMessageQueuePut(g_lieutenantList[i].messageQueue, &letter, 0,0);
 		c_assert(tmp==osOK);
 	}
-	osDelay(150);
+	osDelay(90);
 	
 	return;
 }
@@ -143,7 +143,7 @@ void om_algorithm(uint8_t id, uint8_t m, letter_t letter){
 		
 		else{
 			for(int i=0; i<g_n; i++){
-				if(g_lieutenantList[i].commander || i==id || in_array(i, letter.chain, MAXRECURR-1))
+				if(g_lieutenantList[i].commander || i==id || in_array(i, letter.chain, letter.chainIndex-1))
 					continue;
 					
 				letter.chain[g_m - m + 1] = i;
