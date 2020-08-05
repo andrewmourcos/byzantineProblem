@@ -9,6 +9,7 @@
 #define MAXRECURR 3
 
 // add global variables here
+osMutexId_t mut_printer;
 
 typedef struct {
 	uint8_t chainIndex; // Last position in chain array
@@ -44,8 +45,9 @@ void printLetter(letter_t letter){
   * return true if setup successful and n > 3*m, false otherwise
   */
 bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
+	
 	// create semaphores/mutexes
-
+	mut_printer = osMutexNew(NULL);
 	
 	// create list of generals + malloc error check
 	g_n = nGeneral;
@@ -92,8 +94,8 @@ void cleanup(void) {
 	g_lieutenantList = NULL;
 
 	// free semaphores/mutexes/etc
-	
-	
+	tmp = osMutexDelete(mut_printer);
+	c_assert(tmp==osOK);
 }
 
 
@@ -157,23 +159,6 @@ void om_algorithm(uint8_t id, uint8_t m, letter_t letter){
 				om_algorithm(i, m-1, letter);
 		}
 	}	
-		
-		
-		
-		/*
-		else{
-			for(int i=0; i<g_n; i++){
-				if(g_lieutenantList[i].commander || i==id || in_array(i, letter.chain, letter.chainIndex))
-					continue;
-					
-				letter.chain[g_m - m + 1] = i;
-				letter.chainIndex = g_m - m + 2;
-				
-				om_algorithm(id, m-1, letter);
-			}
-		}
-	*/
-	
 }
 
 /** Generals are created before each test and deleted after each
@@ -192,7 +177,11 @@ void general(void *idPtr) {
 	letter_t received;
 	if(!g_lieutenantList[id].commander){
 		tmp = osMessageQueueGet(g_lieutenantList[id].messageQueue, &received, NULL, osWaitForever);
-		om_algorithm(id, g_m, received);
+		
+		osMutexAcquire(mut_printer, osWaitForever);{
+			om_algorithm(id, g_m, received);
+		} osMutexRelease(mut_printer);
+		
 	}
 
 }
