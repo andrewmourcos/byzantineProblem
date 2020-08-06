@@ -8,14 +8,7 @@
 #define MAXQUEUELEN 1 // max size of the message queue
 #define MAXRECURR 3
 
-// add global variables here
-uint8_t g_generalsVisited = 0;
-uint8_t g_generalsActive = 0;
-
-osMutexId_t mut_printer;
-osMutexId_t mut_counters;
-
-
+// add any types here
 typedef struct {
 	uint8_t chainIndex; // Last position in chain array
 	uint8_t chain[MAXRECURR]; // ex: [0, 3, 4, NaN] == "4:3:0"
@@ -29,11 +22,18 @@ typedef struct {
 	osMessageQueueId_t messageQueue;
 } lieutenant_t;
 
+// add global variables here
 lieutenant_t *g_lieutenantList;
 uint8_t g_n=0; // total number of generals
 uint8_t g_m=0; // number of traitors
 
+uint8_t g_generalsVisited = 0;
+uint8_t g_generalsActive = 0;
 
+osMutexId_t mut_printer;
+osMutexId_t mut_counters;
+
+// Helper function to print letters sent b/w generals
 void printLetter(letter_t letter){
 	for(int i=letter.chainIndex-1; i>=0; i--){
 		printf("%d:", letter.chain[i]);
@@ -49,7 +49,6 @@ void printLetter(letter_t letter){
   * return true if setup successful and n > 3*m, false otherwise
   */
 bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
-
 	// create semaphores/mutexes
 	mut_printer = osMutexNew(NULL);
 	mut_counters = osMutexNew(NULL);
@@ -118,11 +117,7 @@ void cleanup(void) {
   */
 void broadcast(char command, uint8_t sender) {
 	osStatus_t tmp;
-	/*
-	osThreadId_t tid = osThreadGetId();
-	tmp = osThreadSetPriority(tid, osPriorityHigh);
-	c_assert(tmp==osOK);
-	*/
+
 	g_lieutenantList[sender].commander=true;
 	
 	letter_t letter;
@@ -144,10 +139,9 @@ void broadcast(char command, uint8_t sender) {
 		c_assert(tmp==osOK);
 	}
 	
-	// keep yielding until all generals have visited and none are still going
+	// keep lending the processor to the general threads until they're all done
 	while(!(g_generalsActive==0 && g_generalsVisited==g_n)){
 		osDelay(10);
-		
 	}
 	
 }
@@ -198,11 +192,6 @@ void general(void *idPtr) {
 	uint8_t id = *(uint8_t *)idPtr;
 	osStatus_t tmp;
 
-	/*
-	osThreadId_t tid = osThreadGetId();
-	tmp = osThreadSetPriority(tid, osPriorityLow);
-	c_assert(tmp==osOK);
-	*/
 	osMutexAcquire(mut_counters, osWaitForever);{
 		g_generalsActive ++;
 		g_generalsVisited ++;
