@@ -13,8 +13,6 @@ uint8_t g_generalsVisited = 0;
 uint8_t g_generalsActive = 0;
 
 osMutexId_t mut_printer;
-osMutexId_t mut_generalCounter;
-osSemaphoreId_t sem_generalsDone;
 
 typedef struct {
 	uint8_t chainIndex; // Last position in chain array
@@ -51,9 +49,7 @@ void printLetter(letter_t letter){
 bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
 
 	// create semaphores/mutexes
-	mut_generalCounter = osMutexNew(NULL);
 	mut_printer = osMutexNew(NULL);
-	sem_generalsDone = osSemaphoreNew(1,0,NULL);
 	
 	// create list of generals + malloc error check
 	g_n = nGeneral;
@@ -105,10 +101,6 @@ void cleanup(void) {
 	// free semaphores/mutexes/etc
 	tmp = osMutexDelete(mut_printer);
 	c_assert(tmp==osOK);
-	tmp = osMutexDelete(mut_generalCounter);
-	c_assert(tmp==osOK);
-	tmp = osSemaphoreDelete(sem_generalsDone);
-	c_assert(tmp==osOK);
 }
 
 
@@ -146,9 +138,6 @@ void broadcast(char command, uint8_t sender) {
 	while(!(g_generalsActive==0 && g_generalsVisited==g_n)){
 		osThreadYield();
 	}
-	osSemaphoreAcquire(sem_generalsDone, osWaitForever);
-	osSemaphoreRelease(sem_generalsDone);
-	return;
 }
 
 bool in_array(uint8_t val, uint8_t arr[], uint8_t len){
@@ -197,16 +186,9 @@ void general(void *idPtr) {
 	uint8_t id = *(uint8_t *)idPtr;
 	osStatus_t tmp;
 	
-	osMutexAcquire(mut_generalCounter, osWaitForever);
-		g_generalsActive ++;
-		g_generalsVisited ++;
-		if(g_generalsVisited==1){
-			//printf("K");
-			osSemaphoreRelease(sem_generalsDone);
-			osSemaphoreAcquire(sem_generalsDone, osWaitForever);
-		}
-	osMutexRelease(mut_generalCounter);
-
+	g_generalsActive ++;
+	g_generalsVisited ++;
+		
 		// generate next letter and send it
 	letter_t received;
 	if(!g_lieutenantList[id].commander){
@@ -214,10 +196,5 @@ void general(void *idPtr) {
 		om_algorithm(id, g_m, received);
 	}
 	
-	osMutexAcquire(mut_generalCounter, osWaitForever);
-		g_generalsActive--;
-		if(g_generalsActive==0 && g_generalsVisited>=g_n){
-			osSemaphoreRelease(sem_generalsDone);
-		}
-	osMutexRelease(mut_generalCounter);
+	g_generalsActive--;
 }
