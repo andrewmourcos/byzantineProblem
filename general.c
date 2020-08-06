@@ -30,7 +30,7 @@ typedef struct {
 } lieutenant_t;
 
 lieutenant_t *g_lieutenantList;
-uint8_t g_n=0; // total number of generals
+uint8_t g_n=99; // total number of generals
 uint8_t g_m=0; // number of traitors
 
 
@@ -53,7 +53,7 @@ bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
 	// create semaphores/mutexes
 	mut_generalCounter = osMutexNew(NULL);
 	mut_printer = osMutexNew(NULL);
-	sem_generalsDone = osSemaphoreNew(1,1,NULL);
+	sem_generalsDone = osSemaphoreNew(1,0,NULL);
 	
 	// create list of generals + malloc error check
 	g_n = nGeneral;
@@ -142,10 +142,12 @@ void broadcast(char command, uint8_t sender) {
 		tmp = osMessageQueuePut(g_lieutenantList[i].messageQueue, &letter, 0,0);
 		c_assert(tmp==osOK);
 	}
-	//osDelay(50);
+	// keep yielding until all generals have visited and none are still going
+	while(!(g_generalsActive==0 && g_generalsVisited==g_n)){
+		osThreadYield();
+	}
 	osSemaphoreAcquire(sem_generalsDone, osWaitForever);
 	osSemaphoreRelease(sem_generalsDone);
-	printf("b-done");
 	return;
 }
 
@@ -200,22 +202,21 @@ void general(void *idPtr) {
 		g_generalsVisited ++;
 		if(g_generalsVisited==1){
 			//printf("K");
-				osSemaphoreAcquire(sem_generalsDone, osWaitForever);
+			osSemaphoreRelease(sem_generalsDone);
+			osSemaphoreAcquire(sem_generalsDone, osWaitForever);
 		}
 	osMutexRelease(mut_generalCounter);
-	//printf("G");
-	// generate next letter and send it
+
+		// generate next letter and send it
 	letter_t received;
 	if(!g_lieutenantList[id].commander){
 		tmp = osMessageQueueGet(g_lieutenantList[id].messageQueue, &received, NULL, osWaitForever);
 		om_algorithm(id, g_m, received);
 	}
-	//printf("H");
 	
 	osMutexAcquire(mut_generalCounter, osWaitForever);
 		g_generalsActive--;
 		if(g_generalsActive==0 && g_generalsVisited>=g_n){
-			//printf("J");
 			osSemaphoreRelease(sem_generalsDone);
 		}
 	osMutexRelease(mut_generalCounter);
