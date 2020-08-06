@@ -145,6 +145,11 @@
           <WinNumber>1</WinNumber>
           <ItemText>letter</ItemText>
         </Ww>
+        <Ww>
+          <count>1</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>sem_activeGenerals</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>

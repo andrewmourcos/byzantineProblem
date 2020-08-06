@@ -9,7 +9,12 @@
 #define MAXRECURR 3
 
 // add global variables here
+uint8_t g_generalsVisited = 0;
+uint8_t g_generalsActive = 0;
+
 osMutexId_t mut_printer;
+osMutexId_t mut_generalCounter;
+osSemaphoreId_t sem_generalsDone;
 
 typedef struct {
 	uint8_t chainIndex; // Last position in chain array
@@ -28,7 +33,6 @@ lieutenant_t *g_lieutenantList;
 uint8_t g_n=0; // total number of generals
 uint8_t g_m=0; // number of traitors
 
-uint8_t g_numActiveGenerals = 0;
 
 void printLetter(letter_t letter){
 	for(int i=letter.chainIndex-1; i>=0; i--){
@@ -45,9 +49,11 @@ void printLetter(letter_t letter){
   * return true if setup successful and n > 3*m, false otherwise
   */
 bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
-	
+
 	// create semaphores/mutexes
+	mut_generalCounter = osMutexNew(NULL);
 	mut_printer = osMutexNew(NULL);
+	sem_generalsDone = osSemaphoreNew(1,1,NULL);
 	
 	// create list of generals + malloc error check
 	g_n = nGeneral;
@@ -82,6 +88,9 @@ bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
   * dynamically allocated by setup().
   */
 void cleanup(void) {
+	g_generalsActive = 0;
+	g_generalsVisited = 0;
+	
 	// free message queues
 	osStatus_t tmp;
 	for(int i=0; i<g_n; i++){
@@ -95,6 +104,10 @@ void cleanup(void) {
 
 	// free semaphores/mutexes/etc
 	tmp = osMutexDelete(mut_printer);
+	c_assert(tmp==osOK);
+	tmp = osMutexDelete(mut_generalCounter);
+	c_assert(tmp==osOK);
+	tmp = osSemaphoreDelete(sem_generalsDone);
 	c_assert(tmp==osOK);
 }
 
@@ -129,8 +142,10 @@ void broadcast(char command, uint8_t sender) {
 		tmp = osMessageQueuePut(g_lieutenantList[i].messageQueue, &letter, 0,0);
 		c_assert(tmp==osOK);
 	}
-	osDelay(50);
-	
+	//osDelay(50);
+	osSemaphoreAcquire(sem_generalsDone, osWaitForever);
+	osSemaphoreRelease(sem_generalsDone);
+	printf("b-done");
 	return;
 }
 
@@ -152,11 +167,11 @@ void om_algorithm(uint8_t id, uint8_t m, letter_t letter){
 	}
 	
 	else if(m!=0){
-		//char tmp = letter.decision;
 		for(int i=0; i<g_n; i++){
 			if(g_lieutenantList[i].commander || i==id || in_array(i, letter.chain, letter.chainIndex))
 					continue;
-			
+				
+				// treacherous lieutenants will say R if *they* are even, A otherwise
 				if(!g_lieutenantList[id].loyal && id%2==0)
 					letter.decision = 'R';
 				else if(!g_lieutenantList[id].loyal && id%2!=0)
@@ -178,14 +193,30 @@ void om_algorithm(uint8_t id, uint8_t m, letter_t letter){
   */
 void general(void *idPtr) {
 	uint8_t id = *(uint8_t *)idPtr;
-	
 	osStatus_t tmp;
-
+	
+	osMutexAcquire(mut_generalCounter, osWaitForever);
+		g_generalsActive ++;
+		g_generalsVisited ++;
+		if(g_generalsVisited==1){
+			//printf("K");
+				osSemaphoreAcquire(sem_generalsDone, osWaitForever);
+		}
+	osMutexRelease(mut_generalCounter);
+	//printf("G");
 	// generate next letter and send it
 	letter_t received;
 	if(!g_lieutenantList[id].commander){
 		tmp = osMessageQueueGet(g_lieutenantList[id].messageQueue, &received, NULL, osWaitForever);
 		om_algorithm(id, g_m, received);
 	}
-
+	//printf("H");
+	
+	osMutexAcquire(mut_generalCounter, osWaitForever);
+		g_generalsActive--;
+		if(g_generalsActive==0 && g_generalsVisited>=g_n){
+			//printf("J");
+			osSemaphoreRelease(sem_generalsDone);
+		}
+	osMutexRelease(mut_generalCounter);
 }
