@@ -5,7 +5,7 @@
 #include <cstdlib>
 
 // add any #defines here
-#define MAXQUEUELEN 7 // max size of the message queue
+#define MAXQUEUELEN 1 // max size of the message queue
 #define MAXRECURR 3
 
 // add global variables here
@@ -13,6 +13,8 @@ uint8_t g_generalsVisited = 0;
 uint8_t g_generalsActive = 0;
 
 osMutexId_t mut_printer;
+osMutexId_t mut_counters;
+
 
 typedef struct {
 	uint8_t chainIndex; // Last position in chain array
@@ -28,7 +30,7 @@ typedef struct {
 } lieutenant_t;
 
 lieutenant_t *g_lieutenantList;
-uint8_t g_n=99; // total number of generals
+uint8_t g_n=0; // total number of generals
 uint8_t g_m=0; // number of traitors
 
 
@@ -50,6 +52,7 @@ bool setup(uint8_t nGeneral, bool loyal[], uint8_t reporter) {
 
 	// create semaphores/mutexes
 	mut_printer = osMutexNew(NULL);
+	mut_counters = osMutexNew(NULL);
 	
 	// create list of generals + malloc error check
 	g_n = nGeneral;
@@ -101,6 +104,8 @@ void cleanup(void) {
 	// free semaphores/mutexes/etc
 	tmp = osMutexDelete(mut_printer);
 	c_assert(tmp==osOK);
+	tmp = osMutexDelete(mut_counters);
+	c_assert(tmp==osOK);
 }
 
 
@@ -113,7 +118,11 @@ void cleanup(void) {
   */
 void broadcast(char command, uint8_t sender) {
 	osStatus_t tmp;
-	
+	/*
+	osThreadId_t tid = osThreadGetId();
+	tmp = osThreadSetPriority(tid, osPriorityHigh);
+	c_assert(tmp==osOK);
+	*/
 	g_lieutenantList[sender].commander=true;
 	
 	letter_t letter;
@@ -134,10 +143,13 @@ void broadcast(char command, uint8_t sender) {
 		tmp = osMessageQueuePut(g_lieutenantList[i].messageQueue, &letter, 0,0);
 		c_assert(tmp==osOK);
 	}
+	
 	// keep yielding until all generals have visited and none are still going
 	while(!(g_generalsActive==0 && g_generalsVisited==g_n)){
-		osThreadYield();
+		osDelay(10);
+		
 	}
+	
 }
 
 bool in_array(uint8_t val, uint8_t arr[], uint8_t len){
@@ -185,9 +197,16 @@ void om_algorithm(uint8_t id, uint8_t m, letter_t letter){
 void general(void *idPtr) {
 	uint8_t id = *(uint8_t *)idPtr;
 	osStatus_t tmp;
-	
-	g_generalsActive ++;
-	g_generalsVisited ++;
+
+	/*
+	osThreadId_t tid = osThreadGetId();
+	tmp = osThreadSetPriority(tid, osPriorityLow);
+	c_assert(tmp==osOK);
+	*/
+	osMutexAcquire(mut_counters, osWaitForever);{
+		g_generalsActive ++;
+		g_generalsVisited ++;
+	}osMutexRelease(mut_counters);
 		
 		// generate next letter and send it
 	letter_t received;
@@ -196,5 +215,7 @@ void general(void *idPtr) {
 		om_algorithm(id, g_m, received);
 	}
 	
-	g_generalsActive--;
+	osMutexAcquire(mut_counters, osWaitForever);{
+		g_generalsActive--;
+	}osMutexRelease(mut_counters);
 }

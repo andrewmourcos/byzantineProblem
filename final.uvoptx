@@ -150,6 +150,16 @@
           <WinNumber>1</WinNumber>
           <ItemText>sem_activeGenerals</ItemText>
         </Ww>
+        <Ww>
+          <count>2</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>g_generalsActive</ItemText>
+        </Ww>
+        <Ww>
+          <count>3</count>
+          <WinNumber>1</WinNumber>
+          <ItemText>g_generalsVisited</ItemText>
+        </Ww>
       </WatchWindow1>
       <MemoryWindow1>
         <Mm>
@@ -169,7 +179,7 @@
       </Tracepoint>
       <DebugFlag>
         <trace>0</trace>
-        <periodic>0</periodic>
+        <periodic>1</periodic>
         <aLwin>0</aLwin>
         <aCover>0</aCover>
         <aSer1>1</aSer1>
