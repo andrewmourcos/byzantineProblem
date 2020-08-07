@@ -35,10 +35,11 @@ osMutexId_t mut_counters;
 
 // Helper function to print letters sent b/w generals
 void printLetter(letter_t letter){
+	printf(" ");
 	for(int i=letter.chainIndex-1; i>=0; i--){
 		printf("%d:", letter.chain[i]);
 	}
-	printf("%c\n", letter.decision);
+	printf("%c", letter.decision);
 }
 
 /** Record parameters and set up any OS and other resources
@@ -143,6 +144,7 @@ void broadcast(char command, uint8_t sender) {
 	while(!(g_generalsActive==0 && g_generalsVisited==g_n)){
 		osDelay(10);
 	}
+	printf("\n");
 	
 }
 
