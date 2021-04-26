@@ -4,7 +4,7 @@ its uses in technologies such as blockchain and other decentralized
 applications where device states need to be agreed upon.
 
 If there are `m` traitor generals (or "broken devices"), then 3m+1 generals 
-(total devices) must state messages for the OM algo to deterministically 
+(total devices) must send messages for the OM algo to deterministically 
 deduce the correct message.
 
 This is an implementation written in C for an NXP microcontroller. It utilizes 
